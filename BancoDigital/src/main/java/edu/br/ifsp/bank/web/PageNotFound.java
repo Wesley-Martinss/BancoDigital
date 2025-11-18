@@ -11,7 +11,6 @@ public class PageNotFound implements Command {
 	private static PageNotFound instance = new PageNotFound();
 
 	private PageNotFound() {
-		// no-op
 	}
 
 	public static PageNotFound getInstance() {

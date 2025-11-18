@@ -6,7 +6,6 @@
     
 	List<Pessoa> resultados = (List<Pessoa>) request.getAttribute("resultados");
     
-	//retorno de form com input com nome texto
 	Pessoa destino = (Pessoa) request.getAttribute("destino");
     String erro = (String) request.getAttribute("erro");
     
@@ -36,8 +35,8 @@
 <% if (destino == null) {%>
 	<form action="${pageContext.request.contextPath}/pessoa/transferir" method="post">
 	    <label>Pesquisar conta destino:</label><br>
-	    <input type="text" name="texto" required>
-	    <button type="submit">Buscar</button>
+	    <input id="texto" type="text" name="texto" required>
+	    <button type="submit" onclick="return validadorBusca()" >Buscar</button>
 	</form>
 
 <% } %>
@@ -63,6 +62,8 @@
 <% } %>
 
 	<p>voltar <a href="<%= request.getContextPath() + "/home" %>">pagina principal</a>...</p>
+
+<script src="${pageContext.request.contextPath}/assets/js/transferir.js"></script>
 
 </body>
 </html>

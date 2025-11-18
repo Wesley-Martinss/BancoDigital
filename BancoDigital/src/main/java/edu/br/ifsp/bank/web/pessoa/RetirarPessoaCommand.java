@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import edu.br.ifsp.bank.modelo.Pessoa;
 import edu.br.ifsp.bank.persistencia.PessoaDao;
+import edu.br.ifsp.bank.persistencia.TransferenciaDao;
 import edu.br.ifsp.bank.web.Command;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -13,7 +14,9 @@ import jakarta.servlet.http.HttpSession;
 
 public class RetirarPessoaCommand implements Command{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PessoaDao dao = new PessoaDao();
+		PessoaDao pdao = new PessoaDao();
+		TransferenciaDao tdao = new TransferenciaDao();
+		
 		String cpf = request.getParameter("cpf");
 		String valorStr = request.getParameter("valor");
 		
@@ -30,8 +33,8 @@ public class RetirarPessoaCommand implements Command{
 		
 		try {
 			if(cpf != null && valor > 0) {
-				dao.retirar(cpf, valor);
-				Pessoa p = dao.findByCPF(cpf);
+				tdao.retirar(cpf, valor);
+				Pessoa p = pdao.findByCPF(cpf);
 				session.setAttribute("usuarioLogado", p);
 				request.getRequestDispatcher("/pages/home/home.jsp").forward(request, response);
 			    return;

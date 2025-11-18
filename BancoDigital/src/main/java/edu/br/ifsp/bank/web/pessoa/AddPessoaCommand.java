@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import edu.br.ifsp.bank.web.Command;
 import edu.br.ifsp.bank.modelo.Pessoa;
+import edu.br.ifsp.bank.modelo.TipoUsuario;
 import edu.br.ifsp.bank.persistencia.PessoaDao;
 
 import jakarta.servlet.ServletException;
@@ -34,12 +35,12 @@ public class AddPessoaCommand implements Command {
         novaPessoa.setEmail(email);
         novaPessoa.setTelefone(telefone);
         novaPessoa.setEndereco(endereco);
-        
+        novaPessoa.setRole(TipoUsuario.USER);
         novaPessoa.setSaldo(0.0f); 
 
         PessoaDao dao = new PessoaDao();
         try {
-            dao.save(novaPessoa); 
+            dao.add(novaPessoa); 
             
             request.setAttribute("success", "Conta criada com sucesso! Faça login para continuar.");
             request.getRequestDispatcher("/pages/login/login.jsp").forward(request, response);

@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import edu.br.ifsp.bank.modelo.Pessoa;
 import edu.br.ifsp.bank.persistencia.PessoaDao;
+import edu.br.ifsp.bank.persistencia.TransferenciaDao;
 import edu.br.ifsp.bank.web.Command;
 
 public class DepositarPessoaCommand implements Command {
@@ -19,7 +20,9 @@ public class DepositarPessoaCommand implements Command {
        
   
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PessoaDao dao = new PessoaDao();
+		PessoaDao pdao = new PessoaDao();
+		TransferenciaDao tdao = new TransferenciaDao();
+		
 		String cpf = request.getParameter("cpf");
 		String valorStr = request.getParameter("valor");
 
@@ -33,8 +36,8 @@ public class DepositarPessoaCommand implements Command {
 		
 		try {
 			if(cpf != null && valor > 0) {
-			    dao.depositar(cpf, valor);
-			    Pessoa p = dao.findByCPF(cpf);
+			    tdao.depositar(cpf, valor);
+			    Pessoa p = pdao.findByCPF(cpf);
 			    HttpSession session = request.getSession();
 			    session.setAttribute("usuarioLogado", p);
 

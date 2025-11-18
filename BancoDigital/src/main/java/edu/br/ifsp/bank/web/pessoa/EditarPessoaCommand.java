@@ -43,7 +43,7 @@ public class EditarPessoaCommand implements Command{
         pessoaEditada.setRole(TipoUsuario.valueOf(role));
         
         try {
-            dao.save(pessoaEditada); 
+            dao.editar(pessoaEditada); 
             
             request.setAttribute("success", "Conta editada com sucesso! Faça login para continuar.");
             request.getRequestDispatcher("/pages/business/configuracoes/configuracoes.jsp").forward(request, response);

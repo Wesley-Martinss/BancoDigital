@@ -5,115 +5,131 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
-import edu.br.ifsp.bank.modelo.Pessoa;
-import edu.br.ifsp.bank.modelo.TipoUsuario;
 import edu.br.ifsp.bank.modelo.Transferencia;
 
 public class TransferenciaDao {
-	
-	public ArrayList<Transferencia> findByAll() {
-		ArrayList<Transferencia> transferencias = new ArrayList<>();
 
-	    try {
-	        Connection conn = ConnectionFactory.getConnection();
-	        PreparedStatement ps = conn.prepareStatement(
-	            "SELECT id, id_usuarioQueTransferiu, id_usuarioQueRecebeu, horario, valor FROM transferencia"
-	        );
+    
+    public ArrayList<Transferencia> findByAll() {
+        ArrayList<Transferencia> transferencias = new ArrayList<>();
 
-	        ResultSet rs = ps.executeQuery();
+        String sql = "SELECT id, id_usuarioQueTransferiu, id_usuarioQueRecebeu, horario, valor FROM transferencia";
 
-	        while (rs.next()) {
-	            Transferencia transferencia = new Transferencia();
-	            transferencia.setId(rs.getInt("id"));
-	            transferencia.setId_usuarioQueTransferiu(rs.getInt("id_usuarioQueTransferiu"));
-	            transferencia.setId_usuarioQueRecebeu(rs.getInt("id_usuarioQueRecebeu"));
-	            transferencia.setHorario(rs.getTimestamp("horario").toLocalDateTime());
-	            transferencia.setValor(rs.getFloat("valor"));
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
-	            transferencias.add(transferencia);
-	        }
+            while (rs.next()) {
+                Transferencia t = new Transferencia();
+                t.setId(rs.getInt("id"));
+                t.setId_usuarioQueTransferiu(rs.getInt("id_usuarioQueTransferiu"));
+                t.setId_usuarioQueRecebeu(rs.getInt("id_usuarioQueRecebeu"));
+                t.setHorario(rs.getTimestamp("horario").toLocalDateTime());
+                t.setValor(rs.getFloat("valor"));
 
-	        rs.close();
-	        ps.close();
-	        conn.close();
-	    } catch (SQLException e) {
-	        throw new DataAccessException(e);
-	    }
-
-	    return transferencias;
-	}
-
-	
-	
-	 
-    public Transferencia save(Transferencia transferencia) {
-        try {
-            if (isNew(transferencia)) {
-                insert(transferencia);
-            } else {
-                update(transferencia);
+                transferencias.add(t);
             }
+
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
-        return transferencia;
+
+        return transferencias;
     }
 
-    private boolean isNew(Transferencia transferencia) {
-        return transferencia.getId() == 0;
-    }
-
-    private void insert(Transferencia transferencia) throws SQLException {
-        Connection conn = ConnectionFactory.getConnection();
-        
-        String sql = "INSERT INTO transferencia (id_usuarioQueTransferiu, id_usuarioQueRecebeu, horario, valor) "
+    
+    public Transferencia add(Transferencia transferencia) {
+        String sql = "INSERT INTO transferencia "
+                   + "(id_usuarioQueTransferiu, id_usuarioQueRecebeu, horario, valor) "
                    + "VALUES (?, ?, ?, ?)";
 
-        PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps =
+                     conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        ps.setInt(1, transferencia.getId_usuarioQueTransferiu());
-        ps.setInt(2, transferencia.getId_usuarioQueRecebeu());
-        ps.setTimestamp(3, java.sql.Timestamp.valueOf(transferencia.getHorario()));
-        ps.setFloat(4, transferencia.getValor());
+            ps.setInt(1, transferencia.getId_usuarioQueTransferiu());
+            ps.setInt(2, transferencia.getId_usuarioQueRecebeu());
+            ps.setTimestamp(3, java.sql.Timestamp.valueOf(transferencia.getHorario()));
+            ps.setFloat(4, transferencia.getValor());
 
-        ps.executeUpdate();
+            ps.executeUpdate();
 
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()) {
-            transferencia.setId(rs.getInt(1));
-        } else {
-            throw new DataAccessException("Falha ao obter a PK da transferência.");
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    transferencia.setId(rs.getInt(1));
+                } else {
+                    throw new DataAccessException("Erro ao pegar a chave gerada.");
+                }
+            }
+
+            return transferencia;
+
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
         }
+    }
+    
+    
 
-        rs.close();
-        ps.close();
-        conn.close();
+    public void depositar(String cpf, float valor) throws SQLException {
+    	PessoaDao pdao = new PessoaDao();
+    	Transferencia t = new Transferencia();
+        String sql = "UPDATE pessoa SET saldo = saldo + ? WHERE cpf = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setFloat(1, valor);
+            ps.setString(2, cpf);
+            ps.executeUpdate();
+            t.setHorario(LocalDateTime.now());
+            t.setValor(valor);
+            t.setId_usuarioQueRecebeu(pdao.findByCPF(cpf).getId());
+            t.setId_usuarioQueTransferiu(pdao.findByCPF(cpf).getId());
+            add(t);
+        }
     }
 
-    private void update(Transferencia transferencia) throws SQLException {
-        Connection conn = ConnectionFactory.getConnection();
+    
+    public void retirar(String cpf, float valor) throws SQLException {
+    	PessoaDao pdao = new PessoaDao();
+    	Transferencia t = new Transferencia();
 
-        String sql = "UPDATE transferencia SET "
-                   + "id_usuarioQueTransferiu = ?, "
-                   + "id_usuarioQueRecebeu = ?, "
-                   + "horario = ?, "
-                   + "valor = ? "
-                   + "WHERE id = ?";
-
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setInt(1, transferencia.getId_usuarioQueTransferiu());
-        ps.setInt(2, transferencia.getId_usuarioQueRecebeu());
-        ps.setTimestamp(3, java.sql.Timestamp.valueOf(transferencia.getHorario()));
-        ps.setFloat(4, transferencia.getValor());
-        ps.setInt(5, transferencia.getId());
-
-        ps.executeUpdate();
-
-        ps.close();
-        conn.close();
+        String sql = "UPDATE pessoa SET saldo = saldo - ? WHERE cpf = ?";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+        	ps.setFloat(1, valor);
+            ps.setString(2, cpf);
+            ps.executeUpdate();
+            t.setHorario(LocalDateTime.now());
+            t.setValor(valor);
+            t.setId_usuarioQueRecebeu(pdao.findByCPF(cpf).getId());
+            t.setId_usuarioQueTransferiu(pdao.findByCPF(cpf).getId());
+            add(t);
+        }
     }
+    
+    
+    
+
+	
+
+	
+	public Transferencia transferirViaCpf(String cpfQueVaiSerTransferido, String cpfDoUsuarioLogado, float valor) throws SQLException{
+		PessoaDao pdao = new PessoaDao();
+		retirar(cpfDoUsuarioLogado, valor);
+		depositar(cpfQueVaiSerTransferido, valor);
+		
+		Transferencia t = new Transferencia();
+		
+		t.setId_usuarioQueTransferiu(pdao.findByCPF(cpfDoUsuarioLogado).getId());
+		t.setId_usuarioQueRecebeu(pdao.findByCPF(cpfQueVaiSerTransferido).getId());
+		t.setHorario(LocalDateTime.now());
+		t.setValor(valor);
+		
+		return add(t);
+		
+	}
+	
 }

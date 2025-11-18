@@ -4,11 +4,10 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Loja Patterns</title>
-	<base href="<%= request.getContextPath() %>/">
+	<title>Banco Digital</title>
 </head>
 <body>
-	<h1>Loja Patterns</h1>
+	<h1>Banco Digital IFSP</h1>
 	
 	<h2>Login</h2>
 	<%
@@ -19,7 +18,7 @@
 	}
 	%>
 	
-	<form action="login" method="post">
+	<form action="<%=request.getContextPath() %>/login" method="post">
 		<label>Usuário: </label>
 		<input type="text" name="user" required>
 		<br>
@@ -39,7 +38,7 @@
 		<button type="submit">Enviar</button>
 		
 		<br>
-		<a href="pessoa/cadastrar">Crie uma conta</a>
+		<a href="<%=request.getContextPath() %>/pessoa/cadastrar">Crie uma conta</a>
 	</form>
 	
 	

@@ -10,6 +10,7 @@ import edu.br.ifsp.bank.modelo.GeradorPdf;
 import edu.br.ifsp.bank.modelo.Pessoa;
 import edu.br.ifsp.bank.modelo.Transferencia;
 import edu.br.ifsp.bank.persistencia.PessoaDao;
+import edu.br.ifsp.bank.persistencia.TransferenciaDao;
 import edu.br.ifsp.bank.web.Command;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -25,7 +26,9 @@ public class TransferirPessoaCommand implements Command {
     	
     	Transferencia t = new Transferencia();
     	
-        PessoaDao dao = new PessoaDao();
+    	PessoaDao pdao = new PessoaDao();
+		TransferenciaDao tdao = new TransferenciaDao();
+		
         HttpSession session = request.getSession();
 
         Pessoa logado = (Pessoa) session.getAttribute("usuarioLogado");
@@ -40,17 +43,17 @@ public class TransferirPessoaCommand implements Command {
             try {
                 float valor = Float.parseFloat(valorStr);
 
-                Pessoa destino = dao.findByCPF(destinoCpf);
+                Pessoa destino = pdao.findByCPF(destinoCpf);
                 if (destino == null) {
                     erro(request, response, "Conta destino não encontrada.");
                     return;
                 }
 
                 // Realiza transferência no DAO (retorna transferencia preenchida)
-                t = dao.transferirViaCpf(destino.getCpf(), logado.getCpf(), valor);
+                t = tdao.transferirViaCpf(destino.getCpf(), logado.getCpf(), valor);
 
                 // Atualiza saldo na sessão
-                Pessoa atualizado = dao.findByCPF(logado.getCpf());
+                Pessoa atualizado = pdao.findByCPF(logado.getCpf());
                 session.setAttribute("usuarioLogado", atualizado);
 
                 // -------- GERAR PDF ----------
@@ -82,16 +85,16 @@ public class TransferirPessoaCommand implements Command {
             Pessoa destino = null;
 
             // CPF
-            if (texto.matches("^\\d{11}$")) {
-                destino = dao.findByCPF(texto);
+            if (texto.matches("[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}")) {
+                destino = pdao.findByCPF(texto);
             }
             // Email
             else if (texto.matches("^[\\w\\.-]+@[\\w\\.-]+\\.\\w+$")) {
-                destino = dao.findByEmail(texto);
+                destino = pdao.findByEmail(texto);
             }
             // Nome
             else {
-                destino = dao.findByNome(texto);
+                destino = pdao.findByNome(texto);
             }
 
             if (destino == null) {

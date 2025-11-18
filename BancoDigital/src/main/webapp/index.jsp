@@ -8,10 +8,9 @@ final String homeUrl = request.getContextPath() + "/home";
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Loja Patterns</title>
+	<title>Banco Digital</title>
 	<meta http-equiv="refresh" content="0;<%= homeUrl %>">
 </head>
 <body>
-	<p>Redirecionando para a <a href="<%= homeUrl %>">página principal2</a>...</p>
 </body>
 </html>
