@@ -17,6 +17,16 @@ CREATE TABLE pessoa (
     role ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER'
 );
 
+CREATE TABLE investimento (
+    id            INT AUTO_INCREMENT PRIMARY KEY,
+    id_pessoa     INT NOT NULL,
+    valor         DECIMAL(10,2) NOT NULL,
+    taxa_mensal   DECIMAL(5,4)  NOT NULL,  -- 0.0100 = 1% ao mês
+    prazo_meses   INT NOT NULL,
+    data_aplicacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pessoa) REFERENCES pessoa(id)
+);
+
 -- Tabela Transferência
 CREATE TABLE transferencia (
     id INT AUTO_INCREMENT PRIMARY KEY,
