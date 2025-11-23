@@ -99,4 +99,7 @@ Validações aprimoradas
 👨‍💻 Autor
 
 Gabriel Scache Prudencio
+Jonas Gonçalves Fernandes
+Wesley Martins
+Thomaz
 Estudante de Sistemas para Internet — IFSP
