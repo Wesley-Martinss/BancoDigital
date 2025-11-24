@@ -44,7 +44,7 @@ public class AuthenticationFilter extends HttpFilter implements Filter {
 	private boolean shouldAuthenticate(HttpServletRequest request) {
 		String path = extractPath(request);
 
-		if ("/login".equals(path) || "/pessoa/cadastrar".equals(path)) {
+		if ("/login".equals(path) || "/pessoa/cadastrar".equals(path) || "/assets/css/login.css".equals(path) || "/assets/js/login.js".equals(path)) {
 			return false;
 		}
 		
