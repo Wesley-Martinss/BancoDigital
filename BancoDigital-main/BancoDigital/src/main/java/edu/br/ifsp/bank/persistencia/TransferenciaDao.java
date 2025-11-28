@@ -132,4 +132,44 @@ public class TransferenciaDao {
 		
 	}
 	
+	
+	public ArrayList<Transferencia> listarPorCpf(String cpf) {
+	    ArrayList<Transferencia> transferencias = new ArrayList<>();
+	    PessoaDao pdao = new PessoaDao();
+
+	    int idPessoa = pdao.findByCPF(cpf).getId();
+
+	    String sql = 
+	        "SELECT id, id_usuarioQueTransferiu, id_usuarioQueRecebeu, horario, valor " +
+	        "FROM transferencia " +
+	        "WHERE id_usuarioQueTransferiu = ? OR id_usuarioQueRecebeu = ? " +
+	        "ORDER BY horario DESC";
+
+	    try (Connection conn = ConnectionFactory.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setInt(1, idPessoa);
+	        ps.setInt(2, idPessoa);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Transferencia t = new Transferencia();
+	                t.setId(rs.getInt("id"));
+	                t.setId_usuarioQueTransferiu(rs.getInt("id_usuarioQueTransferiu"));
+	                t.setId_usuarioQueRecebeu(rs.getInt("id_usuarioQueRecebeu"));
+	                t.setHorario(rs.getTimestamp("horario").toLocalDateTime());
+	                t.setValor(rs.getFloat("valor"));
+
+	                transferencias.add(t);
+	            }
+	        }
+
+	    } catch (SQLException e) {
+	        throw new DataAccessException(e);
+	    }
+
+	    return transferencias;
+	}
+	
+	
 }
