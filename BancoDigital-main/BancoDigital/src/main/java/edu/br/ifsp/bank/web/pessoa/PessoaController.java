@@ -61,6 +61,8 @@ public class PessoaController extends HttpServlet{
 	               .forward(req, res);
 	        };
 	        
+	        case "/extrato" -> new ExtratoPessoaCommand();
+	        
 	        case "/emprestimoSac" -> (req, res) -> {
 	            req.getRequestDispatcher("/pages/business/emprestimoSac.jsp")
 	               .forward(req, res);
@@ -91,6 +93,7 @@ public class PessoaController extends HttpServlet{
 	        case "/depositar" -> new DepositarPessoaCommand();
 	        case "/retirar" -> new RetirarPessoaCommand();
 	        case "/transferir" -> new TransferirPessoaCommand();
+	        
 	        case "/emprestimoSac" -> new SimularEmprestimoSacCommand();
 	        case "/investir" -> new InvestirPessoaCommand();
 	        
