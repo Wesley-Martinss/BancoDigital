@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.br.ifsp.bank.modelo.EnviarEmail;
+import edu.br.ifsp.bank.modelo.GeradorCodigos;
 import edu.br.ifsp.bank.modelo.Investimento;
 import edu.br.ifsp.bank.modelo.Pessoa;
 import edu.br.ifsp.bank.modelo.TipoUsuario;
@@ -365,6 +367,20 @@ public class PessoaDao {
                 try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ex) { /* ignora */ }
             }
         }
+    }
+
+    
+    public void EnviarEmailVerificacaoCodigo(String emaildestino) {
+        GeradorCodigos.getInstance().criaCodigo(); 
+    	EnviarEmail.enviarEmailComCodigo(emaildestino);
+    }
+    
+    public boolean validaCodigo(Integer codigoDigitado) {
+
+        GeradorCodigos gerador = GeradorCodigos.getInstance();
+        Integer codigoReal = gerador.getCodigoInt();
+
+        return codigoReal.equals(codigoDigitado);
     }
 
 }

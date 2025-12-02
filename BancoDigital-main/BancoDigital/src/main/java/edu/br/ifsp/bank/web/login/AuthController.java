@@ -11,15 +11,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/login", "/logout"})
+//edu.br.ifsp.bank.web.login.AuthController.java
+
+@WebServlet(urlPatterns = {"/login", "/logout", "/verificacaoCodigo"})
 public class AuthController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	// ... (serialVersionUID e imports)
 
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)	throws ServletException, IOException {
 		Command cmd = switch(request.getServletPath()) {
 		case "/login" -> new ViewCommand("forward:/pages/login/login.jsp");
-		case "/logout" -> new LogoutCommand();		
+		case "/logout" -> new LogoutCommand();
+		case "/verificacaoCodigo" -> new ViewCommand("forward:/pages/login/verificacaoCodigo.jsp"); 
 		default -> PageNotFound.getInstance();
 		};
 		
@@ -29,6 +32,7 @@ public class AuthController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Command cmd = switch (request.getServletPath()) {
 		case "/login" -> new LoginCommand();
+		case "/verificacaoCodigo" -> new VerificacaoCodigoCommand(); 
 		default -> PageNotFound.getInstance();
 		};
 		

@@ -189,30 +189,7 @@ public class TransferenciaDao {
 	    return transferencias;
 	}
 	
-/*	public Transferencia depositar(String cpf, float valor) throws SQLException {
-	    PessoaDao pdao = new PessoaDao();
-	    Transferencia t = new Transferencia();
 
-	    String sql = "UPDATE pessoa SET saldo = saldo + ? WHERE cpf = ?";
-
-	    try (Connection conn = ConnectionFactory.getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
-
-	        ps.setFloat(1, valor);
-	        ps.setString(2, cpf);
-	        ps.executeUpdate();
-
-	        t.setHorario(LocalDateTime.now());
-	        t.setValor(valor);
-
-	        // depósito: quem transfere == quem recebe
-	        int id = pdao.findByCPF(cpf).getId();
-	        t.setId_usuarioQueRecebeu(id);
-	        t.setId_usuarioQueTransferiu(id);
-
-	        return add(t);   // <-- RETORNA A TRANSFERÊNCIA GRAVADA
-	    }
-	}*/
 	public Transferencia depositar(String cpf, float valor) throws SQLException {
 	    PessoaDao pdao = new PessoaDao();
 	    Transferencia t = new Transferencia();

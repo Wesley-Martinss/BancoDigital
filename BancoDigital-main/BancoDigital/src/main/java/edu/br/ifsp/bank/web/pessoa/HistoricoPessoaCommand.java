@@ -15,8 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
-
 public class HistoricoPessoaCommand implements Command {
 
     @Override
@@ -41,9 +39,14 @@ public class HistoricoPessoaCommand implements Command {
         PessoaDao pdao = new PessoaDao();
 
         ArrayList<Transferencia> transferencias = tdao.listarPorCpf(cpf);
-
         List<HistoricoItem> itens = new ArrayList<>();
+
         for (Transferencia tr : transferencias) {
+
+            if (tr.getId_usuarioQueTransferiu() == tr.getId_usuarioQueRecebeu()) {
+                continue;
+            }
+
             Pessoa rem = pdao.findById(tr.getId_usuarioQueTransferiu());
             Pessoa dest = pdao.findById(tr.getId_usuarioQueRecebeu());
 
@@ -52,7 +55,13 @@ public class HistoricoPessoaCommand implements Command {
             String nomeDest = dest != null ? dest.getNome() : ("#id:" + tr.getId_usuarioQueRecebeu());
             String cpfDest = dest != null ? dest.getCpf() : "";
 
-            itens.add(new HistoricoItem(tr, nomeRem, cpfRem, nomeDest, cpfDest));
+            itens.add(new HistoricoItem(
+                tr,
+                nomeRem,
+                cpfRem,
+                nomeDest,
+                cpfDest
+            ));
         }
 
         request.setAttribute("itensHistorico", itens);

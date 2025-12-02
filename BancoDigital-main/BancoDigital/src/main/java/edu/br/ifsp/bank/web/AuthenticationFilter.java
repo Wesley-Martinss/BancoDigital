@@ -20,44 +20,44 @@ public class AuthenticationFilter extends HttpFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {	
 		final HttpServletRequest httpRequest = (HttpServletRequest)request;
+		final HttpServletResponse httpResponse = (HttpServletResponse)response;
 		
 		String path = extractPath(httpRequest);
 		System.out.println("[AuthFilter] path: " + httpRequest.getMethod() + " " + path);
 
-		//e aqui se o usuario estiver certo recebera um false
-		if (shouldAuthenticate(httpRequest)) {
-			HttpServletResponse httpResponse = (HttpServletResponse)response;
-			final String destination = httpRequest.getContextPath() + "/login?next=" + path;
-			httpResponse.sendRedirect(destination);
-			return;
-		}	
+		if (!hasAuthenticatedUser(httpRequest)) {
+		    if (urlPermitidas(path)) { 
+			    final String destination = httpRequest.getContextPath() + "/login?next=" + path;
+			    httpResponse.sendRedirect(destination);
+			    return;
+            }
+		} 
+		else if (!isUserVerified(httpRequest) && !path.equals("/verificacaoCodigo")) {
+		    final String destination = httpRequest.getContextPath() + "/verificacaoCodigo";
+		    httpResponse.sendRedirect(destination);
+		    return;
+		}
 		
-		
-		// se nao entrar no if ira executar isso que significa que pode seguir
 		chain.doFilter(request, response);
 	}
 
 	private String extractPath(HttpServletRequest request) {
 		return request.getRequestURI().substring(request.getContextPath().length());
 	}
-
-	private boolean shouldAuthenticate(HttpServletRequest request) {
-		String path = extractPath(request);
-
-		if ("/login".equals(path) || "/pessoa/cadastrar".equals(path) || "/assets/css/login.css".equals(path) || "/assets/js/login.js".equals(path)) {
-			return false;
-		}
-		
-		// se usuario retorna true aqui o boolean recebera um false
-		boolean authenticationNeeded = !hasAuthenticatedUser(request);
-
-		return authenticationNeeded;
+    
+	private boolean urlPermitidas(String path) {
+		return !("/login".equals(path) || "/verificacaoCodigo".equals(path) || "/pessoa/cadastrar".equals(path) || path.startsWith("/assets/"));
 	}
-
-	//retorna true se o usuario esta logado ou false no contrario
+    
 	private boolean hasAuthenticatedUser(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		return (session != null && session.getAttribute("usuarioLogado") != null);
 	}
+	
+    private boolean isUserVerified(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        // Retorna true se a sessão existe E o atributo 'isVerificado' é true.
+        return (session != null && Boolean.TRUE.equals(session.getAttribute("isVerificado")));
+    }
 	
 }

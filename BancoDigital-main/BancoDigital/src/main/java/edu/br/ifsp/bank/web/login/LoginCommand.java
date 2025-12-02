@@ -16,7 +16,6 @@ public class LoginCommand implements Command {
 
         String user = request.getParameter("user");
         String password = request.getParameter("password");
-        String path = request.getParameter("next");
         HttpSession session = request.getSession();
 
         if (user == null || password == null) {
@@ -27,18 +26,30 @@ public class LoginCommand implements Command {
         try {
             PessoaDao dao = new PessoaDao();
             Pessoa p = dao.login(user, password);
-            session.setAttribute("usuarioLogado", p);
-            session.setAttribute("role", p.getRole());
-
+            
 
             if (p != null) {
-                session.setAttribute("usuarioLogado", p);
-                if (path == null) path = "/home";
-                new ViewCommand("redirect:" + path).execute(request, response);
+                //criamos a sessao de usuario logado 
+            	session.setAttribute("usuarioLogado", p);
+                session.setAttribute("role", p.getRole());
+                
+                
+                //porem para continuar é preciso verificar e 
+                //aqui so fica true se o verificaCodigoCommand deixar ou seja validar pelo 
+                //codigo do email
+                session.setAttribute("isVerificado", false); 
+
+                //aqui envia o email
+                new PessoaDao().EnviarEmailVerificacaoCodigo(p.getEmail());
+
+                String pathRedirecionamento = "/verificacaoCodigo";
+                new ViewCommand("redirect:" + pathRedirecionamento).execute(request, response);
+
             } else {
                 request.setAttribute("error", true);
                 request.getRequestDispatcher("/pages/login/login.jsp").forward(request, response);
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
