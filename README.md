@@ -11,6 +11,8 @@ Jakarta EE
 
 MVC
 
+BootStrap
+
 DAO Pattern
 
 iTextPDF (geração de PDF)
