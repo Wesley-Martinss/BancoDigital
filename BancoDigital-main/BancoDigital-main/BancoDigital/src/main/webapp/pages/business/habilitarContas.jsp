@@ -78,7 +78,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% for (Pessoa pessoa : pessoasNaoHabilitadas) { %>
+                       <% for (Pessoa pessoa : pessoasNaoHabilitadas) { 
+                    	   if (pessoa.getRole() == null) continue;
+
+                    	   if(pessoasNaoHabilitadas != null) {
+                      		 if (pessoa.getRole().equals(TipoUsuario.ADMIN) || pessoa.getRole().equals(TipoUsuario.GERENTE)) continue;
+                      	 	}
+                      	 }
+
+						%>
+
                             <tr>
                                 <td><%= pessoa.getId() %></td>
                                 <td><%= pessoa.getCpf() %></td>

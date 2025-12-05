@@ -46,7 +46,7 @@
         <div class="row">
             <div class="col-md-6">
                 <%-- IMPORTANTE: Action deve apontar para o DesabilitarContasCommand --%>
-                <form action="${pageContext.request.contextPath}/pessoa/desabilitarContas" method="post	" class="d-flex">
+                <form action="${pageContext.request.contextPath}/pessoa/desabilitarContas" method="post" class="d-flex">
                     <input type="text" name="termoBusca" class="form-control filter-input me-2" 
                            placeholder="Pesquisar por Nome..." 
                            >
@@ -76,7 +76,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% for (Pessoa pessoa : pessoasHabilitadas) { %>
+                        <% for (Pessoa pessoa : pessoasHabilitadas) { 
+                        	 if(pessoasHabilitadas != null) {
+                        		 if (pessoa.getRole().equals(TipoUsuario.ADMIN) || pessoa.getRole().equals(TipoUsuario.GERENTE)) continue;
+                        	 }
+						%>
+
                             <tr>
                                 <td><%= pessoa.getId() %></td>
                                 <td><%= pessoa.getCpf() %></td>
