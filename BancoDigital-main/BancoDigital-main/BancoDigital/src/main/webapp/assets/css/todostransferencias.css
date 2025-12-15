@@ -1,0 +1,355 @@
+/* CSS compartilhado para todostransferencias.css e todosusuarios.css */
+:root {
+	--primary: #8A05BE;
+	--primary-dark: #6200EA;
+	--secondary: #00D9B2;
+	--success: #00C853;
+	--danger: #EA1D2C;
+	--info: #2196F3;
+	--text: #1A1A1D;
+	--text-light: #6E6E73;
+	--border: #E8E8E8;
+	--bg: #F5F5F5;
+	--white: #FFFFFF;
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+	--shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+	--transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	line-height: 1.6;
+}
+
+.transferencias-wrapper, .usuarios-wrapper {
+	min-height: 100vh;
+	padding: 40px 20px;
+}
+
+.transferencias-container, .usuarios-container {
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+/* Header */
+.transferencias-header, .usuarios-header {
+	background: var(--white);
+	border-radius: 24px;
+	padding: 32px;
+	margin-bottom: 32px;
+	box-shadow: var(--shadow-sm);
+}
+
+.back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-light);
+	text-decoration: none;
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 24px;
+	transition: var(--transition);
+}
+
+.back-link:hover {
+	color: var(--primary);
+	gap: 12px;
+}
+
+.header-content {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.header-icon {
+	width: 70px;
+	height: 70px;
+	background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+	border-radius: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 32px;
+	color: var(--white);
+	box-shadow: 0 4px 16px rgba(138, 5, 190, 0.25);
+	flex-shrink: 0;
+}
+
+.transferencias-title, .usuarios-title {
+	font-size: 32px;
+	font-weight: 700;
+	color: var(--text);
+	margin-bottom: 8px;
+	letter-spacing: -0.5px;
+}
+
+.transferencias-subtitle, .usuarios-subtitle {
+	font-size: 16px;
+	color: var(--text-light);
+	margin: 0;
+}
+
+/* KPIs */
+.kpi-card {
+	background: var(--white);
+	border-radius: 16px;
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	box-shadow: var(--shadow-sm);
+	transition: var(--transition);
+}
+
+.kpi-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-md);
+}
+
+.kpi-icon {
+	width: 50px;
+	height: 50px;
+	border-radius: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	color: var(--white);
+	flex-shrink: 0;
+}
+
+.kpi-primary .kpi-icon {
+	background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.kpi-success .kpi-icon {
+	background: linear-gradient(135deg, var(--success) 0%, #00897B 100%);
+}
+
+.kpi-info .kpi-icon {
+	background: linear-gradient(135deg, var(--info) 0%, #1976D2 100%);
+}
+
+.kpi-content {
+	flex: 1;
+}
+
+.kpi-label {
+	font-size: 12px;
+	color: var(--text-light);
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 4px;
+}
+
+.kpi-value {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--text);
+}
+
+/* Cards */
+.card {
+	border: none;
+	border-radius: 20px;
+	box-shadow: var(--shadow-sm);
+	transition: var(--transition);
+	margin-bottom: 24px;
+}
+
+.card:hover {
+	box-shadow: var(--shadow-md);
+}
+
+.card-body {
+	padding: 24px;
+}
+
+.card-title {
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--text);
+	display: flex;
+	align-items: center;
+}
+
+/* Tables */
+.transferencias-table, .usuarios-table {
+	margin: 0;
+}
+
+.transferencias-table thead th, .usuarios-table thead th {
+	background: var(--bg);
+	color: var(--text);
+	font-weight: 600;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	padding: 16px 12px;
+	border: none;
+}
+
+.transferencias-table tbody tr, .usuarios-table tbody tr {
+	border-bottom: 1px solid var(--border);
+	transition: var(--transition);
+}
+
+.transferencias-table tbody tr:hover, .usuarios-table tbody tr:hover {
+	background: var(--bg);
+}
+
+.transferencias-table tbody td, .usuarios-table tbody td {
+	padding: 16px 12px;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+.user-info {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.user-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 12px;
+	background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--white);
+	font-weight: 700;
+	font-size: 16px;
+	flex-shrink: 0;
+}
+
+.user-id {
+	font-weight: 600;
+	color: var(--text);
+	background: var(--bg);
+	padding: 4px 12px;
+	border-radius: 8px;
+	font-size: 13px;
+}
+
+.valor-transferencia {
+	color: var(--primary);
+	font-size: 15px;
+}
+
+.saldo-value {
+	color: var(--success);
+	font-size: 15px;
+}
+
+.role-badge {
+	font-size: 11px;
+	font-weight: 600;
+	padding: 6px 12px;
+	text-transform: uppercase;
+}
+
+.role-admin {
+	background: linear-gradient(135deg, var(--danger) 0%, #C62828 100%);
+}
+
+.role-gerente {
+	background: linear-gradient(135deg, #FFA000 0%, #FF6F00 100%);
+}
+
+.role-cliente {
+	background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+/* Empty State */
+.empty-card {
+	background: var(--white);
+}
+
+.empty-state {
+	text-align: center;
+	padding: 80px 20px;
+}
+
+.empty-state i {
+	font-size: 80px;
+	color: var(--text-light);
+	opacity: 0.5;
+	margin-bottom: 24px;
+}
+
+.empty-state h4 {
+	font-size: 24px;
+	font-weight: 700;
+	color: var(--text);
+	margin-bottom: 12px;
+}
+
+.empty-state p {
+	font-size: 16px;
+	color: var(--text-light);
+	margin: 0;
+}
+
+/* Back Section */
+.back-section {
+	text-align: center;
+	margin-top: 32px;
+}
+
+.back-main-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-light);
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 500;
+	padding: 12px 24px;
+	border-radius: 12px;
+	transition: var(--transition);
+	background: var(--white);
+	box-shadow: var(--shadow-sm);
+}
+
+.back-main-link:hover {
+	color: var(--primary);
+	box-shadow: var(--shadow-md);
+	transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.transferencias-wrapper, .usuarios-wrapper {
+		padding: 20px 16px;
+	}
+	
+	.transferencias-header, .usuarios-header {
+		padding: 24px;
+	}
+	
+	.header-content {
+		flex-direction: column;
+		text-align: center;
+	}
+	
+	.transferencias-title, .usuarios-title {
+		font-size: 24px;
+	}
+	
+	.table-responsive {
+		font-size: 13px;
+	}
+}

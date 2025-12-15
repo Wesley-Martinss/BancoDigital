@@ -10,36 +10,11 @@ if (menuToggle) {
 
 // ===== BALANCE ANIMATION =====
 const balanceElement = document.getElementById('mainBalance');
-if (balanceElement) {
-	const text = balanceElement.textContent;
-	const valueMatch = text.match(/[\d,.]+/);
-	
-	if (valueMatch) {
-		const finalValue = parseFloat(valueMatch[0].replace(/\./g, '').replace(',', '.'));
-		let currentValue = 0;
-		const duration = 2000;
-		const steps = 80;
-		const increment = finalValue / steps;
-		const stepDuration = duration / steps;
-		
-		let step = 0;
-		const timer = setInterval(() => {
-			currentValue += increment;
-			step++;
-			
-			if (step >= steps) {
-				currentValue = finalValue;
-				clearInterval(timer);
-			}
-			
-			const formatted = currentValue.toLocaleString('pt-BR', {
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 2
-			});
-			balanceElement.textContent = 'R$ ' + formatted;
-		}, stepDuration);
-	}
-}
+if (balanceElement) balanceElement.textContent = 'R$ ' + finalValue.toLocaleString('pt-BR', {
+	minimumFractionDigits: 2,
+	maximumFractionDigits: 2
+});
+
 
 // ===== LOAD NEWS =====
 async function fetchBankNews() {
