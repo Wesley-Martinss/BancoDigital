@@ -8,14 +8,6 @@ if (menuToggle) {
 	});
 }
 
-// ===== BALANCE ANIMATION =====
-const balanceElement = document.getElementById('mainBalance');
-if (balanceElement) balanceElement.textContent = 'R$ ' + finalValue.toLocaleString('pt-BR', {
-	minimumFractionDigits: 2,
-	maximumFractionDigits: 2
-});
-
-
 // ===== LOAD NEWS =====
 async function fetchBankNews() {
 	const newsContainer = document.getElementById('newsContainer');

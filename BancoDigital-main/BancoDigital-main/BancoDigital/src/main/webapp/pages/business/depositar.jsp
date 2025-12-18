@@ -34,6 +34,7 @@ String tipoPdf = (String) session.getAttribute("tipoPdf");
             <a href="<%=request.getContextPath()%>/home" class="back-link">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
+            
             <div class="header-content">
                 <div class="header-icon">
                     <i class="bi bi-cash-coin"></i>

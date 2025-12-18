@@ -28,6 +28,12 @@ public class TransferirPessoaCommand implements Command {
         String destinoCpf = request.getParameter("destinoCpf");
         String valorStr = request.getParameter("valor");
 
+        if (request.getMethod().equalsIgnoreCase("GET") || (texto == null && destinoCpf == null)) {
+            session.removeAttribute("ultimaTransferencia");
+            session.removeAttribute("tipoPdf");
+        }
+        
+        
         // FASE 2 - CONFIRMAR TRANSFERÊNCIA
         if (destinoCpf != null && valorStr != null) {
             try {

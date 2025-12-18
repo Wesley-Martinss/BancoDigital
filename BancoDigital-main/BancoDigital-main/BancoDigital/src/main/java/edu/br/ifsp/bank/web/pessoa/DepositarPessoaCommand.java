@@ -21,11 +21,14 @@ public class DepositarPessoaCommand implements Command {
         PessoaDao pdao = new PessoaDao();
         TransferenciaDao tdao = new TransferenciaDao();
         HttpSession session = request.getSession();
-
+        session.removeAttribute("ultimaTransferencia");
+        session.removeAttribute("tipoPdf");
         String cpf = request.getParameter("cpf");
         String valorStr = request.getParameter("valor");
 
-        if (valorStr == null || valorStr.isBlank()) {
+        if (request.getMethod().equalsIgnoreCase("GET") || valorStr == null || valorStr.isBlank()) {
+        	session.removeAttribute("ultimaTransferencia");
+            session.removeAttribute("tipoPdf");
             request.setAttribute("erro", "Valor inválido.");
             request.getRequestDispatcher("/pages/business/depositar.jsp").forward(request, response);
             return;
@@ -42,8 +45,7 @@ public class DepositarPessoaCommand implements Command {
 	         session.setAttribute("tipoPdf", "deposito");
 	
 	         request.setAttribute("sucesso", true);
-	         request.getRequestDispatcher("/pages/business/depositar.jsp")
-	                .forward(request, response);
+	         response.sendRedirect(request.getContextPath() + "/pages/business/depositar.jsp");
 	         return;
 
         } catch (Exception e) {
